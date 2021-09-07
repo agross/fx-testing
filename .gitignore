@@ -1,0 +1,7 @@
+*.suo
+*.user
+.DS_Store
+
+.vs/
+[Bb]in/
+[Oo]bj/

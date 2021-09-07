@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  server:
+    image: fx-server
+    build:
+      context: ./Server
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Elsa: Server=db;Port=3306;Database=elsa;User=root;Password=dev;
+      ConnectionStrings__Domain: Server=db;Port=3306;Database=domain;User=root;Password=dev;
+    ports:
+      - '5000:80'
+
+  dashboard:
+    image: elsaworkflows/elsa-dashboard
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # Elsa dashboard URL.
+      ELSA__SERVER__BASEURL: http://localhost:5001
+      # Elsa server URL.
+      ELSA__SERVER__BASEADDRESS: http://localhost:5000
+    ports:
+      - '5001:80'
+
+  db:
+    image: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: dev
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+
+  smtp:
+    image: rnwood/smtp4dev
+    ports:
+      - '2525:80'
+    volumes:
+      - smtp4dev-data:/smtp4dev
+
+volumes:
+  mariadb-data:
+  smtp4dev-data:
