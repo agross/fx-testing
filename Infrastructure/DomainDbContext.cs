@@ -11,5 +11,8 @@ namespace Infrastructure
     }
 
     public DbSet<Begehung> Begehungen { get; set; } = default!;
+    public DbSet<Begehungsobjekt> Begehungsobjekt { get; set; } = default!;
+    public DbSet<Mitarbeiter> Mitarbeiter { get; set; } = default!;
+    public DbSet<Prüfling> Prüfling { get; set; } = default!;
   }
 }

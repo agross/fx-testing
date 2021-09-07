@@ -18,7 +18,7 @@ namespace Infrastructure
                           .Build();
       var connectionString = args.Any() ? args[0] : configuration.GetConnectionString("Domain");
 
-      Console.WriteLine($"Domain data connection string ${connectionString}");
+      Console.WriteLine($"Domain data connection string {connectionString}");
       var builder = new DbContextOptionsBuilder<DomainDbContext>();
 
       builder.UseMySql(connectionString,
