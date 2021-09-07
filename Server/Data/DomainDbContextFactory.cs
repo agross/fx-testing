@@ -16,7 +16,7 @@ namespace Server.Data
     {
       _logger = logger;
     }
-    
+
     public BegehungContext CreateDbContext(string[] args)
     {
       var configuration = new ConfigurationBuilder()
@@ -24,7 +24,7 @@ namespace Server.Data
                           .AddJsonFile("appsettings.json")
                           .Build();
       var connectionString = args.Any() ? args[0] : configuration.GetConnectionString("Domain");
-      
+
       _logger.LogDebug("Domain data connection string {ConnectionString}", connectionString);
       var builder = new DbContextOptionsBuilder<BegehungContext>();
 

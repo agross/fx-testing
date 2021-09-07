@@ -4,12 +4,12 @@ using Server.Models;
 
 namespace Server.Data
 {
-    public class BegehungContext : DbContext
+  public class BegehungContext : DbContext
+  {
+    public BegehungContext(DbContextOptions options) : base(options)
     {
-        public BegehungContext(DbContextOptions options) : base(options)
-        {
-        }
-
-        public DbSet<Begehung> Begehungen { get; set; } = default!;
     }
+
+    public DbSet<Begehung> Begehungen { get; set; } = default!;
+  }
 }

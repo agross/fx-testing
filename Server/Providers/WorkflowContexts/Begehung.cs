@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,12 +43,12 @@ namespace Server.Providers.WorkflowContexts
       {
         // We are handling a newly posted blog post.
         begehung = ((HttpRequestModel) context.WorkflowExecutionContext.Input!).GetBody<Models.Begehung>();
-        
+
         begehung.Id = Guid.NewGuid().ToString("N");
-        
+
         context.WorkflowExecutionContext.WorkflowContext = begehung;
         context.WorkflowExecutionContext.ContextId = begehung.Id;
-        
+
         await dbSet.AddAsync(begehung, cancellationToken);
       }
       else
