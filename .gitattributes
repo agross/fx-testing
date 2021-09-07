@@ -1,0 +1,6 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Visual Studio.
+*.sln text eol=crlf merge=union
+*.cs diff=csharp
