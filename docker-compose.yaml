@@ -12,6 +12,21 @@ services:
       ConnectionStrings__Domain: Server=db;Port=3306;Database=domain;User=root;Password=dev;
     ports:
       - '5000:80'
+    depends_on:
+      - db
+
+  web:
+    image: fx-web
+    build:
+      context: .
+      dockerfile: ./Web/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Domain: Server=db;Port=3306;Database=domain;User=root;Password=dev;
+    ports:
+      - '5100:80'
+    depends_on:
+      - db
 
   dashboard:
     image: elsaworkflows/elsa-dashboard

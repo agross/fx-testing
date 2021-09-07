@@ -11,9 +11,9 @@ namespace Server.Data.StartupTasks
 {
   public class RunDomainMigrations : IStartupTask
   {
-    readonly IDbContextFactory<BegehungContext> _dbContextFactory;
+    readonly IDbContextFactory<DomainDbContext> _dbContextFactory;
 
-    public RunDomainMigrations(IDbContextFactory<BegehungContext> dbContextFactory)
+    public RunDomainMigrations(IDbContextFactory<DomainDbContext> dbContextFactory)
     {
       _dbContextFactory = dbContextFactory;
     }

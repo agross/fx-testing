@@ -44,9 +44,9 @@ namespace Server
 
       services
         .AddDbContextFactory
-          <BegehungContext>(b => b.UseMySql(domainConnectionString,
+          <DomainDbContext>(b => b.UseMySql(domainConnectionString,
                                             ServerVersion.AutoDetect(domainConnectionString),
-                                            o => o.MigrationsAssembly(typeof(BegehungContext)
+                                            o => o.MigrationsAssembly(typeof(DomainDbContext)
                                                                       .Assembly
                                                                       .FullName)))
         .AddCors(cors => cors.AddDefaultPolicy(policy => policy.AllowAnyHeader()

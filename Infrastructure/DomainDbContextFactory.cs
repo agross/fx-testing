@@ -1,25 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
-
-using Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-namespace Server.Data
+namespace Infrastructure
 {
-  public class BegehungDbContextFactory : IDesignTimeDbContextFactory<BegehungContext>
+  public class DomainDbContextFactory : IDesignTimeDbContextFactory<DomainDbContext>
   {
-    readonly ILogger<BegehungDbContextFactory> _logger;
-
-    public BegehungDbContextFactory(ILogger<BegehungDbContextFactory> logger)
-    {
-      _logger = logger;
-    }
-
-    public BegehungContext CreateDbContext(string[] args)
+    public DomainDbContext CreateDbContext(string[] args)
     {
       var configuration = new ConfigurationBuilder()
                           .SetBasePath(Directory.GetCurrentDirectory())
@@ -27,17 +18,17 @@ namespace Server.Data
                           .Build();
       var connectionString = args.Any() ? args[0] : configuration.GetConnectionString("Domain");
 
-      _logger.LogDebug("Domain data connection string {ConnectionString}", connectionString);
-      var builder = new DbContextOptionsBuilder<BegehungContext>();
+      Console.WriteLine($"Domain data connection string ${connectionString}");
+      var builder = new DbContextOptionsBuilder<DomainDbContext>();
 
       builder.UseMySql(connectionString,
                        ServerVersion.AutoDetect(connectionString),
-                       db => db.MigrationsAssembly(typeof(BegehungDbContextFactory)
+                       db => db.MigrationsAssembly(GetType()
                                                    .Assembly
                                                    .GetName()
                                                    .Name));
 
-      return new BegehungContext(builder.Options);
+      return new DomainDbContext(builder.Options);
     }
   }
 }

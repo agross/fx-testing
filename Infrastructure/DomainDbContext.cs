@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
-  public class BegehungContext : DbContext
+  public class DomainDbContext : DbContext
   {
-    public BegehungContext(DbContextOptions options) : base(options)
+    public DomainDbContext(DbContextOptions options) : base(options)
     {
     }
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>@ViewData["Title"]</title>
+</head>
+<body>
+  <ul>
+    <li>
+      <a asp-page="/Begehungen/Index">Begehungen</a>
+    </li>
+  </ul>
+
+  <main role="main">
+    @RenderBody()
+  </main>
+
+  @await RenderSectionAsync("Scripts", false)
+</body>
+</html>

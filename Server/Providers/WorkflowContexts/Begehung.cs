@@ -16,9 +16,9 @@ namespace Server.Providers.WorkflowContexts
 {
   public class Begehung : WorkflowContextRefresher<Domain.Models.Begehung>
   {
-    readonly IDbContextFactory<BegehungContext> _factory;
+    readonly IDbContextFactory<DomainDbContext> _factory;
 
-    public Begehung(IDbContextFactory<BegehungContext> factory)
+    public Begehung(IDbContextFactory<DomainDbContext> factory)
     {
       _factory = factory;
     }
