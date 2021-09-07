@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,7 @@ namespace Web
         {
           var context = services.GetRequiredService<DomainDbContext>();
           context.Database.EnsureCreated();
+          context.Database.Migrate();
           Stammdaten.Initialize(context);
         }
         catch (Exception ex)

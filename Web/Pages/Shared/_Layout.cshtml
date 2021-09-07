@@ -4,16 +4,25 @@
   <title>@ViewData["Title"]</title>
 </head>
 <body>
-  <ul>
-    <li>
-      <a asp-page="/Begehungen/Index">Begehungen</a>
-    </li>
-  </ul>
+<ul>
+  <li>
+    <a asp-page="/Begehungen/Index">Begehungen</a>
+  </li>
+  <li>
+    <a asp-page="/Prüflinge/Index">Prüflinge</a>
+  </li>
+  <li>
+    <a asp-page="/Begehungsobjekte/Index">Begehungsobjekte</a>
+  </li>
+  <li>
+    <a asp-page="/Mitarbeiter/Index">Mitarbeiter</a>
+  </li>
+</ul>
 
-  <main role="main">
-    @RenderBody()
-  </main>
+<main role="main">
+  @RenderBody()
+</main>
 
-  @await RenderSectionAsync("Scripts", false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

@@ -25,6 +25,8 @@
 
     <ItemGroup>
       <Folder Include="Pages\Begehungen" />
+      <Folder Include="Pages\Begehungsobjekte" />
+      <Folder Include="Pages\Mitarbeiter" />
       <Folder Include="Pages\Prüflinge" />
     </ItemGroup>
 

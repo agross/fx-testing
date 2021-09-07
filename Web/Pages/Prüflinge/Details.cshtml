@@ -1,0 +1,49 @@
+@page
+@model Web.Pages.Prüflinge.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Prüfling</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prüfling.Typ)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prüfling.Typ)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prüfling.Bezeichnung)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prüfling.Bezeichnung)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prüfling.Straße)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prüfling.Straße)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prüfling.Haus)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prüfling.Haus)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prüfling.Ort)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prüfling.Ort)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Prüfling.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
