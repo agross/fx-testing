@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 
 using Elsa.Services;
 
+using Infrastructure;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Server.Data.StartupTasks

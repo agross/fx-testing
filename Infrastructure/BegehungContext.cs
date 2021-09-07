@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Models;
 
-using Server.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Server.Data
+namespace Infrastructure
 {
   public class BegehungContext : DbContext
   {

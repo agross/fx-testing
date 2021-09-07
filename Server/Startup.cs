@@ -1,9 +1,12 @@
 using System;
 
 using Elsa;
+using Elsa.Activities.Temporal;
 using Elsa.Persistence.EntityFramework.Core.Extensions;
 using Elsa.Persistence.EntityFramework.MySql;
 using Elsa.Runtime;
+
+using Infrastructure;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using Server.Data;
+using NodaTime;
+
 using Server.Data.StartupTasks;
 using Server.Providers.WorkflowContexts;
 
@@ -39,12 +43,12 @@ namespace Server
       var elsaSection = Configuration.GetSection("Elsa");
 
       services
-        .AddDbContextFactory<BegehungContext>(options => options.UseMySql(domainConnectionString,
-                                                                          ServerVersion
-                                                                            .AutoDetect(domainConnectionString),
-                                                                          sql => sql.MigrationsAssembly(typeof(Startup)
-                                                                                                        .Assembly
-                                                                                                        .FullName)))
+        .AddDbContextFactory
+          <BegehungContext>(b => b.UseMySql(domainConnectionString,
+                                            ServerVersion.AutoDetect(domainConnectionString),
+                                            o => o.MigrationsAssembly(typeof(BegehungContext)
+                                                                      .Assembly
+                                                                      .FullName)))
         .AddCors(cors => cors.AddDefaultPolicy(policy => policy.AllowAnyHeader()
                                                                .AllowAnyMethod()
                                                                .AllowAnyOrigin()))
@@ -54,7 +58,8 @@ namespace Server
                          .AddJavaScriptActivities()
                          .AddHttpActivities(elsaSection.GetSection("Server").Bind)
                          .AddEmailActivities(elsaSection.GetSection("Smtp").Bind)
-                         .AddQuartzTemporalActivities())
+                         .AddQuartzTemporalActivities()
+                         .AddCommonTemporalActivities())
         .AddElsaApiEndpoints()
         .AddWorkflowContextProvider<Begehung>()
 

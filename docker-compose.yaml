@@ -4,7 +4,8 @@ services:
   server:
     image: fx-server
     build:
-      context: ./Server
+      context: .
+      dockerfile: ./Server/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__Elsa: Server=db;Port=3306;Database=elsa;User=root;Password=dev;

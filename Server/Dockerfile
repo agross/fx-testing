@@ -2,12 +2,13 @@
 WORKDIR /src
 
 COPY . .
-RUN dotnet restore "Server.csproj"
-RUN dotnet build "Server.csproj" \
+RUN ls -la
+RUN dotnet restore "Server/Server.csproj"
+RUN dotnet build "Server/Server.csproj" \
            --no-restore \
            --configuration Release \
            --output /app/build
-RUN dotnet publish "Server.csproj" \
+RUN dotnet publish "Server/Server.csproj" \
            --no-restore \
            --configuration Release \
            --output /app/publish \

@@ -6,13 +6,15 @@ using Elsa.Activities.Http.Models;
 using Elsa.Services;
 using Elsa.Services.Models;
 
+using Infrastructure;
+
 using Microsoft.EntityFrameworkCore;
 
 using Server.Data;
 
 namespace Server.Providers.WorkflowContexts
 {
-  public class Begehung : WorkflowContextRefresher<Models.Begehung>
+  public class Begehung : WorkflowContextRefresher<Domain.Models.Begehung>
   {
     readonly IDbContextFactory<BegehungContext> _factory;
 
@@ -21,8 +23,8 @@ namespace Server.Providers.WorkflowContexts
       _factory = factory;
     }
 
-    public override async ValueTask<Models.Begehung?> LoadAsync(LoadWorkflowContext context,
-                                                                CancellationToken cancellationToken = default)
+    public override async ValueTask<Domain.Models.Begehung?> LoadAsync(LoadWorkflowContext context,
+                                                                       CancellationToken cancellationToken = default)
     {
       var contextId = context.ContextId;
       await using var dbContext = _factory.CreateDbContext();
@@ -32,7 +34,7 @@ namespace Server.Providers.WorkflowContexts
                                                  cancellationToken);
     }
 
-    public override async ValueTask<string?> SaveAsync(SaveWorkflowContext<Models.Begehung> context,
+    public override async ValueTask<string?> SaveAsync(SaveWorkflowContext<Domain.Models.Begehung> context,
                                                        CancellationToken cancellationToken = default)
     {
       var begehung = context.Context;
@@ -42,7 +44,7 @@ namespace Server.Providers.WorkflowContexts
       if (begehung == null)
       {
         // We are handling a newly posted blog post.
-        begehung = ((HttpRequestModel) context.WorkflowExecutionContext.Input!).GetBody<Models.Begehung>();
+        begehung = ((HttpRequestModel) context.WorkflowExecutionContext.Input!).GetBody<Domain.Models.Begehung>();
 
         begehung.Id = Guid.NewGuid().ToString("N");
 

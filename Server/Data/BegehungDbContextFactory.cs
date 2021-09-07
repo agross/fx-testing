@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 
+using Infrastructure;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -8,11 +10,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Server.Data
 {
-  public class DomainDbContextFactory : IDesignTimeDbContextFactory<BegehungContext>
+  public class BegehungDbContextFactory : IDesignTimeDbContextFactory<BegehungContext>
   {
-    readonly ILogger<DomainDbContextFactory> _logger;
+    readonly ILogger<BegehungDbContextFactory> _logger;
 
-    public DomainDbContextFactory(ILogger<DomainDbContextFactory> logger)
+    public BegehungDbContextFactory(ILogger<BegehungDbContextFactory> logger)
     {
       _logger = logger;
     }
@@ -30,7 +32,7 @@ namespace Server.Data
 
       builder.UseMySql(connectionString,
                        ServerVersion.AutoDetect(connectionString),
-                       db => db.MigrationsAssembly(typeof(DomainDbContextFactory)
+                       db => db.MigrationsAssembly(typeof(BegehungDbContextFactory)
                                                    .Assembly
                                                    .GetName()
                                                    .Name));

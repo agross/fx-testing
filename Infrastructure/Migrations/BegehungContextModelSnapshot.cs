@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Server.Data;
 
-namespace Server.Data.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(BegehungContext))]
     partial class BegehungContextModelSnapshot : ModelSnapshot
