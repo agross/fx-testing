@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <Folder Include="Pages\Begehungen" />
+      <Folder Include="Pages\Prüflinge" />
     </ItemGroup>
 
 </Project>

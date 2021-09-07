@@ -29,7 +29,7 @@ namespace Web
         {
           var context = services.GetRequiredService<DomainDbContext>();
           context.Database.EnsureCreated();
-          // DbInitializer.Initialize(context);
+          Stammdaten.Initialize(context);
         }
         catch (Exception ex)
         {
