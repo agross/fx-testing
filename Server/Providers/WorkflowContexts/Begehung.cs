@@ -1,6 +1,7 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Domain.Models;
 
 using Elsa.Activities.Http.Models;
 using Elsa.Services;
@@ -9,8 +10,6 @@ using Elsa.Services.Models;
 using Infrastructure;
 
 using Microsoft.EntityFrameworkCore;
-
-using Server.Data;
 
 namespace Server.Providers.WorkflowContexts
 {
@@ -27,9 +26,18 @@ namespace Server.Providers.WorkflowContexts
                                                                        CancellationToken cancellationToken = default)
     {
       var contextId = context.ContextId;
+
+      if (contextId == null &&
+          context.WorkflowExecutionContext.IsFirstPass)
+      {
+        var start = ((HttpRequestModel) context.WorkflowExecutionContext.Input!).GetBody<StarteBegehung>();
+        contextId = start.BegehungId;
+      }
+
       await using var dbContext = _factory.CreateDbContext();
 
-      return await dbContext.Begehungen.AsQueryable()
+      return await dbContext.Begehungen
+                            .AsQueryable()
                             .FirstOrDefaultAsync(x => x.Id == contextId,
                                                  cancellationToken);
     }
@@ -38,29 +46,23 @@ namespace Server.Providers.WorkflowContexts
                                                        CancellationToken cancellationToken = default)
     {
       var begehung = context.Context;
+      if (begehung == null)
+      {
+        return null;
+      }
+
       await using var dbContext = _factory.CreateDbContext();
       var dbSet = dbContext.Begehungen;
 
-      if (begehung == null)
-      {
-        // We are handling a newly posted blog post.
-        begehung = ((HttpRequestModel) context.WorkflowExecutionContext.Input!).GetBody<Domain.Models.Begehung>();
+      // Required?
+      // context.WorkflowExecutionContext.WorkflowContext = begehung;
+      // context.WorkflowExecutionContext.ContextId = begehung.Id;
 
-        begehung.Id = Guid.NewGuid().ToString("N");
+      var existing = await dbSet.AsQueryable()
+                                .SingleAsync(x => x.Id == begehung.Id,
+                                             cancellationToken);
 
-        context.WorkflowExecutionContext.WorkflowContext = begehung;
-        context.WorkflowExecutionContext.ContextId = begehung.Id;
-
-        await dbSet.AddAsync(begehung, cancellationToken);
-      }
-      else
-      {
-        var existing = await dbSet.AsQueryable()
-                                  .SingleAsync(x => x.Id == begehung.Id,
-                                               cancellationToken);
-
-        dbContext.Entry(existing).CurrentValues.SetValues(begehung);
-      }
+      dbContext.Entry(existing).CurrentValues.SetValues(begehung);
 
       await dbContext.SaveChangesAsync(cancellationToken);
 
