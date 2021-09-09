@@ -16,8 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using NodaTime;
-
 using Server.Data.StartupTasks;
 using Server.Providers.WorkflowContexts;
 
@@ -28,6 +26,9 @@ namespace Server
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
+      
+      var root = (IConfigurationRoot) Configuration;
+      Console.WriteLine(root.GetDebugView());
     }
 
     IConfiguration Configuration { get; }
