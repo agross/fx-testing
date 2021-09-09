@@ -53,7 +53,9 @@ namespace Server
                                                                .AllowAnyMethod()
                                                                .AllowAnyOrigin()))
         .AddElsa(elsa => elsa
-                         .UseEntityFrameworkPersistence(ef => ef.UseMySql(elsaConnectionString), false)
+                         .UseEntityFrameworkPersistence(ef => ef.UseMySql(elsaConnectionString),
+                                                        // https://github.com/elsa-workflows/elsa-core/issues/1453
+                                                        false)
                          .AddConsoleActivities()
                          .AddJavaScriptActivities()
                          .AddHttpActivities(elsaSection.GetSection("Server").Bind)
@@ -62,9 +64,6 @@ namespace Server
                          .AddCommonTemporalActivities())
         .AddElsaApiEndpoints()
         .AddWorkflowContextProvider<Begehung>()
-
-        // https://github.com/elsa-workflows/elsa-core/issues/1453
-        // .AddStartupTask<RunMigrations>()
         .AddStartupTask<RunDomainMigrations>();
     }
 
