@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Elsa.Activities.Email" Version="2.2.1" />
-      <PackageReference Include="Elsa.Activities.Http" Version="2.2.1" />
-      <PackageReference Include="Elsa.Activities.Temporal.Common" Version="2.2.1" />
-      <PackageReference Include="Elsa.Activities.Temporal.Quartz" Version="2.2.1" />
-      <PackageReference Include="Elsa.Persistence.EntityFramework.MySql" Version="2.2.1" />
-      <PackageReference Include="Elsa.Server.Api" Version="2.2.1" />
+      <PackageReference Include="Elsa.Activities.Email" Version="2.3.0-preview.120" />
+      <PackageReference Include="Elsa.Activities.Http" Version="2.3.0-preview.120" />
+      <PackageReference Include="Elsa.Activities.Temporal.Common" Version="2.3.0-preview.120" />
+      <PackageReference Include="Elsa.Activities.Temporal.Quartz" Version="2.3.0-preview.120" />
+      <PackageReference Include="Elsa.Persistence.EntityFramework.MySql" Version="2.3.0-preview.120" />
+      <PackageReference Include="Elsa.Server.Api" Version="2.3.0-preview.120" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
