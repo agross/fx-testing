@@ -43,7 +43,13 @@ namespace Web
       app.UseStaticFiles()
          .UseRouting()
          .UseAuthorization()
-         .UseEndpoints(endpoints => endpoints.MapRazorPages());
+         .UseEndpoints(endpoints =>
+         {
+           endpoints.MapRazorPages();
+
+           endpoints.MapControllerRoute("default",
+                                        "{controller=Home}/{action=Index}/{id?}");
+         });
     }
   }
 }

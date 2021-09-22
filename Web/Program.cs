@@ -1,12 +1,17 @@
 using System;
 
+using Domain.Models;
+
 using Infrastructure;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using NServiceBus;
 
 namespace Web
 {
@@ -14,10 +19,33 @@ namespace Web
   {
     public static void Main(string[] args)
     {
-      var host = CreateHostBuilder(args).Build();
-      
+      var host = CreateHostBuilder(args)
+                 .UseNServiceBus(context =>
+                 {
+                   var config = new EndpointConfiguration("fx");
+                   var transport = config.UseTransport<RabbitMQTransport>();
+                   transport.ConnectionString(context.Configuration.GetConnectionString("RabbitMQ"));
+                   transport.UseConventionalRoutingTopology();
+
+                   config.Conventions()
+                         .DefiningCommandsAs(type => type.Namespace != null &&
+                                                     (type.Namespace.Contains(".Commands")||
+                                                      type.Namespace.StartsWith(("Domain.Models"))));
+
+                   config.UseSerialization<NewtonsoftSerializer>();
+
+                   transport.Routing()
+                            .RouteToEndpoint(typeof(StarteBegehung).Assembly,
+                                             "fx");
+
+                   config.SendOnly();
+
+                   return config;
+                 })
+                 .Build();
+
       CreateDbIfNotExists(host);
-      
+
       host.Run();
     }
 
