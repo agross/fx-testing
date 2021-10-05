@@ -4,6 +4,8 @@ using Domain.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
+using NSB.Backend.Begehungen.Commands;
+
 using NServiceBus;
 
 namespace Web.Pages
@@ -21,6 +23,20 @@ namespace Web.Pages
     public async Task<IActionResult> Index(string id)
     {
       await _bus.Send(new StarteBegehung { BegehungId = id });
+
+      return Redirect("/Begehungen");
+    }
+    
+    public async Task<IActionResult> Abschließen(string id)
+    {
+      await _bus.Send(new BegehungAbschließen { BegehungId = id });
+
+      return Redirect("/Begehungen");
+    }
+    
+    public async Task<IActionResult> Verwerfen(string id)
+    {
+      await _bus.Send(new BegehungVerwerfen { BegehungId = id });
 
       return Redirect("/Begehungen");
     }

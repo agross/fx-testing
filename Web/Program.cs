@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using NSB.Backend.Begehungen.Commands;
+
 using NServiceBus;
 
 namespace Web
@@ -29,13 +31,16 @@ namespace Web
 
                    config.Conventions()
                          .DefiningCommandsAs(type => type.Namespace != null &&
-                                                     (type.Namespace.Contains(".Commands")||
-                                                      type.Namespace.StartsWith(("Domain.Models"))));
+                                                     (type.Namespace.Contains(".Commands") ||
+                                                      type.Namespace.StartsWith("Domain.Models")));
 
                    config.UseSerialization<NewtonsoftSerializer>();
 
                    transport.Routing()
                             .RouteToEndpoint(typeof(StarteBegehung).Assembly,
+                                             "fx");
+                   transport.Routing()
+                            .RouteToEndpoint(typeof(BegehungAbschließen).Assembly,
                                              "fx");
 
                    config.SendOnly();
