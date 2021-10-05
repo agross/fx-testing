@@ -34,7 +34,7 @@ namespace NSB.Backend.Begehungen
       await RequestTimeout<Erinnern>(context, TimeSpan.FromSeconds(30));
     }
 
-    public Task Handle(BegehungAbschließen message, IMessageHandlerContext context)
+    public async Task Handle(BegehungAbschließen message, IMessageHandlerContext context)
     {
       if (Data.Status != Begehungsstatus.Durchführung &&
           Data.Status != Begehungsstatus.Abgeschlossen)
@@ -43,16 +43,29 @@ namespace NSB.Backend.Begehungen
       }
 
       Data.Status = Begehungsstatus.Abgeschlossen;
-
-      return Task.CompletedTask;
+      
+      await context.Publish(new BegehungAbgeschlossen { Id = Data.BegehungId });
+      await context.SendLocal(new SendeEmail("begeher@example.com")
+      {
+        Subject = $"Begehung {Data.BegehungId} abgeschlossen",
+        Body = "Danke.",
+      });
+      
+      MarkAsComplete();
     }
 
-    public Task Handle(BegehungVerwerfen message, IMessageHandlerContext context)
+    public async Task Handle(BegehungVerwerfen message, IMessageHandlerContext context)
     {
       Data.Status = Begehungsstatus.Verworfen;
+      
+      await context.Publish(new BegehungVerworfen { Id = Data.BegehungId });
+      await context.SendLocal(new SendeEmail("begeher@example.com")
+      {
+        Subject = $"Begehung {Data.BegehungId} verworfen",
+        Body = "Danke.",
+      });
+      
       MarkAsComplete();
-
-      return Task.CompletedTask;
     }
 
     public async Task Timeout(Erinnern message, IMessageHandlerContext context)
@@ -62,7 +75,11 @@ namespace NSB.Backend.Begehungen
         return;
       }
 
-      await context.SendLocal(new SendeEmail("begeher@example.com"));
+      await context.SendLocal(new SendeEmail("begeher@example.com")
+      {
+        Subject = $"Begehung {Data.BegehungId} ist offen",
+        Body = "Bitte kümmern Sie sich.",
+      });
       await RequestTimeout<Erinnern>(context, TimeSpan.FromSeconds(30));
     }
 

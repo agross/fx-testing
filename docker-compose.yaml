@@ -52,6 +52,21 @@ services:
     volumes:
       - smtp4dev-data:/smtp4dev
 
+  nsb:
+    image: fx-nsb
+    build:
+      context: .
+      dockerfile: ./NSB.Backend/Dockerfile
+    depends_on:
+      - db
+      - mq
+
+  mq:
+    image: rabbitmq:3-management
+    ports:
+      - '5672:5672'
+      - '15672:15672' # http://localhost:15672/#/exchanges
+
 volumes:
   mariadb-data:
   smtp4dev-data:
