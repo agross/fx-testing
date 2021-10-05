@@ -24,6 +24,9 @@ namespace Web
       var host = CreateHostBuilder(args)
                  .UseNServiceBus(context =>
                  {
+                   var root = (IConfigurationRoot) context.Configuration;
+                   Console.WriteLine(root.GetDebugView());
+
                    var config = new EndpointConfiguration("fx");
                    var transport = config.UseTransport<RabbitMQTransport>();
                    transport.ConnectionString(context.Configuration.GetConnectionString("RabbitMQ"));
