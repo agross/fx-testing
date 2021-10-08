@@ -1,4 +1,8 @@
+using System;
+
 using Infrastructure;
+
+using MassTransit;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+using MT.Backend.Messages.Begehungen;
 
 namespace Web
 {
@@ -30,6 +36,42 @@ namespace Web
         });
 
       services.AddDatabaseDeveloperPageExceptionFilter();
+
+      services.AddMassTransit(x =>
+      {
+        x.SetKebabCaseEndpointNameFormatter();
+
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+          var section = Configuration.GetSection("MassTransit");
+          var url = section.GetValue<string>("Url");
+          var host = section.GetValue<string>("Host");
+          var userName = section.GetValue<string>("UserName");
+          var password = section.GetValue<string>("Password");
+          if (section == null || url == null || host == null)
+          {
+            throw new
+              ConfigurationException("Section 'mass-transit' configuration settings are not found in appSettings.json");
+          }
+
+          cfg.Host($"rabbitmq://{url}/{host}",
+                   configurator =>
+                   {
+                     configurator.Username(userName);
+                     configurator.Password(password);
+                   });
+
+          cfg.ConfigureEndpoints(ctx);
+
+          var begehungen = new Uri(section.GetSection("Queues")
+                                          .GetValue<string>("Begehungen"));
+          EndpointConvention.Map<StarteBegehung>(begehungen);
+          EndpointConvention.Map<SchließeBegehungAb>(begehungen);
+          EndpointConvention.Map<VerwerfeBegehung>(begehungen);
+        });
+      });
+
+      services.AddMassTransitHostedService();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

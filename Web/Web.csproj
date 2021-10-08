@@ -7,10 +7,13 @@
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-      <ProjectReference Include="..\NSB.Backend\NSB.Backend.csproj" />
+      <ProjectReference Include="..\MT.Backend.Messages\MT.Backend.Messages.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="MassTransit.Analyzers" Version="7.2.2" />
+      <PackageReference Include="MassTransit.AspNetCore" Version="7.2.2" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.2" />
       <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.9" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />

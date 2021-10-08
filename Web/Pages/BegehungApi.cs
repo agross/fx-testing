@@ -1,42 +1,43 @@
 using System.Threading.Tasks;
 
-using Domain.Models;
+using MassTransit;
 
 using Microsoft.AspNetCore.Mvc;
 
-using NSB.Backend.Begehungen.Commands;
-
-using NServiceBus;
+using MT.Backend.Messages.Begehungen;
 
 namespace Web.Pages
 {
   public class BegehungApi : Controller
   {
-    readonly IMessageSession _bus;
+    readonly IBus _bus;
+    readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public BegehungApi(IMessageSession bus)
+    public BegehungApi(IBus bus, ISendEndpointProvider sendEndpointProvider)
     {
       _bus = bus;
+      _sendEndpointProvider = sendEndpointProvider;
     }
 
     // GET
     public async Task<IActionResult> Index(string id)
     {
-      await _bus.Send(new StarteBegehung { BegehungId = id });
+      // https://stackoverflow.com/questions/62713786/masstransit-endpointconvention-azure-service-bus/62714778#62714778
+      await _bus.Send<StarteBegehung>(new { BegehungId = id });
 
       return Redirect("/Begehungen");
     }
-    
+
     public async Task<IActionResult> Abschließen(string id)
     {
-      await _bus.Send(new BegehungAbschließen { BegehungId = id });
+      await _bus.Send<SchließeBegehungAb>(new { BegehungId = id });
 
       return Redirect("/Begehungen");
     }
-    
+
     public async Task<IActionResult> Verwerfen(string id)
     {
-      await _bus.Send(new BegehungVerwerfen { BegehungId = id });
+      await _bus.Send<VerwerfeBegehung>(new { BegehungId = id });
 
       return Redirect("/Begehungen");
     }

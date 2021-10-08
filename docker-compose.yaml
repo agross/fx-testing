@@ -1,27 +1,7 @@
 version: '3.8'
 
 services:
-  server:
-    image: fx-server
-    build:
-      context: .
-      dockerfile: ./Server/Dockerfile
-    ports:
-      - '5000:80'
-    depends_on:
-      - db
-
-  dashboard:
-    image: elsaworkflows/elsa-dashboard
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      # Elsa dashboard URL.
-      ELSA__SERVER__BASEURL: http://localhost:5010
-      # Elsa server URL, externally available.
-      ELSA__SERVER__BASEADDRESS: http://localhost:5000
-    ports:
-      - '5010:80'
-
+  # http://localhost:5100
   web:
     image: fx-web
     build:
@@ -43,6 +23,25 @@ services:
     ports:
       - '3306:3306'
 
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  # Postgres management UI.
+  # http://localhost:8080 with postgres/dev
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  # http://localhost:2525
   smtp:
     image: rnwood/smtp4dev
     ports:
@@ -51,22 +50,28 @@ services:
     volumes:
       - smtp4dev-data:/smtp4dev
 
-  nsb:
-    image: fx-nsb
+  mt:
+    image: fx-mt
     build:
       context: .
-      dockerfile: ./NSB.Backend/Dockerfile
+      dockerfile: ./MT.Backend/Dockerfile
     restart: on-failure
     depends_on:
       - db
+      - postgres
       - mq
 
+  # http://localhost:15672 with guest/guest
   mq:
-    image: rabbitmq:3-management
+    image: masstransit/rabbitmq:3.8 # latest is broken (web UI)
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     ports:
       - '5672:5672'
-      - '15672:15672' # http://localhost:15672/#/exchanges
+      - '15672:15672'
 
 volumes:
   mariadb-data:
   smtp4dev-data:
+  postgres-data:
+  rabbitmq-data:
